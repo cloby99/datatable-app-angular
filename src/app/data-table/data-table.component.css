@@ -1,0 +1,23 @@
+/* src/app/data-table/data-table.component.css */
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  th {
+    cursor: pointer;
+  }
+  
+  th:hover {
+    background-color: #f1f1f1;
+  }
+  
+  div {
+    margin-top: 10px;
+  }
+  

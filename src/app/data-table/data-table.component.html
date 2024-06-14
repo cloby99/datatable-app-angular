@@ -1,1 +1,46 @@
-<p>data-table works!</p>
+<div>
+    <input type="text" placeholder="Search" (input)="applySearch($event)" />
+    <table>
+      <thead>
+        <tr>
+          <th (click)="sort('id')">ID</th>
+          <th (click)="sort('name')">Name</th>
+          <th (click)="sort('email')">Email</th>
+          <th (click)="sort('body')">Body</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let comment of filteredComments">
+          <td>{{ comment.id }}</td>
+          <td>{{ comment.name }}</td>
+          <td>{{ comment.email }}</td>
+          <td>{{ comment.body }}</td>
+          <td>
+            <button (click)="editComment(comment)">Edit</button>
+            <button (click)="deleteComment(comment.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+        Previous
+      </button>
+      <button (click)="changePage(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">
+        Next
+      </button>
+    </div>
+    <div>
+      <label>
+        Items per page:
+        <select (change)="onItemsPerPageChange($event)">
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+          <option value="-1">All</option>
+        </select>
+      </label>
+    </div>
+  </div>
+  
