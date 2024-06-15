@@ -1,23 +1,96 @@
-/* src/app/data-table/data-table.component.css */
-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-  }
-  
-  th {
-    cursor: pointer;
-  }
-  
-  th:hover {
-    background-color: #f1f1f1;
-  }
-  
-  div {
-    margin-top: 10px;
-  }
-  
+.datatable-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0;
+}
+
+header {
+  background-color: #293241;
+  color: white;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem;
+}
+
+.content {
+  margin: 0.5rem 5rem 1rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+.search-bar {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.search-bar>input {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  width: 25%;
+}
+
+.sorting-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.sorting-buttons>button {
+  padding: 0.5rem 1rem;
+  background-color: #ee6c4d;
+  font-size: medium;
+  font-weight: 700;
+  border: #ee6c4d;
+  border-radius: 0.5rem;
+  opacity: 0.8;
+}
+
+.sorting-buttons>button:hover {
+  opacity: 1;
+}
+
+#comments td,
+#comments th {
+  padding: 0.2rem 0.8rem;
+}
+
+#comments tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+#comments tr:hover {
+  background-color: #e0fbfc;
+}
+
+#comments th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #3d5a80;
+  color: white;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+
+}
+
+.action-buttons {
+  padding: 0.2rem 0.5rem;
+}
+
+.edit-comments {
+  padding: 0.5rem 1rem;
+}

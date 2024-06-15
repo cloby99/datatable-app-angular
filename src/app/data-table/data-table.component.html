@@ -1,33 +1,105 @@
-<div>
-    <input type="text" placeholder="Search" (input)="applySearch($event)" />
-    <table>
+<div class="datatable-page">
+  <header>
+    <h2>Task 02 - Angular</h2>
+  </header>
+  <div class="content">
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search..."
+        (input)="applySearch($event)"
+      />
+      <div class="sorting-buttons">
+        <button (click)="sort('id')">Sort by Id</button>
+        <button (click)="sort('name')">Sort by Name</button>
+      </div>
+    </div>
+    <table id="comments">
       <thead>
         <tr>
-          <th (click)="sort('id')">ID</th>
-          <th (click)="sort('name')">Name</th>
-          <th (click)="sort('email')">Email</th>
-          <th (click)="sort('body')">Body</th>
-          <th>Actions</th>
+          <th>ID</th>
+          <th>Post ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Body</th>
+          <th class="actions">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let comment of filteredComments">
-          <td>{{ comment.id }}</td>
-          <td>{{ comment.name }}</td>
-          <td>{{ comment.email }}</td>
-          <td>{{ comment.body }}</td>
-          <td>
-            <button (click)="editComment(comment)">Edit</button>
+        <tr
+          *ngFor="let comment of filteredComments"
+          [class.edit-mode]="editedComment?.id === comment.id"
+        >
+          <td *ngIf="editedComment?.id !== comment.id">{{ comment.id }}</td>
+          <td *ngIf="editedComment?.id !== comment.id">{{ comment.postId }}</td>
+          <td *ngIf="editedComment?.id !== comment.id">{{ comment.name }}</td>
+          <td *ngIf="editedComment?.id !== comment.id">{{ comment.email }}</td>
+          <td *ngIf="editedComment?.id !== comment.id">{{ comment.body }}</td>
+
+          <!-- Edit form -->
+          <ng-container *ngIf="editedComment?.id === comment.id">
+            <td>
+              <input
+                [(ngModel)]="editedComment!.id"
+                readonly
+                disabled=""
+                class="edit-comments"
+              />
+            </td>
+            <td>
+              <input
+                [(ngModel)]="editedComment!.postId"
+                readonly
+                disabled=""
+                class="edit-comments"
+              />
+            </td>
+            <td>
+              <input [(ngModel)]="editedComment!.name" class="edit-comments" />
+            </td>
+            <td>
+              <input [(ngModel)]="editedComment!.email" class="edit-comments" />
+            </td>
+            <td>
+              <input [(ngModel)]="editedComment!.body" class="edit-comments" />
+            </td>
+          </ng-container>
+
+          <td class="action-buttons">
+            <button
+              *ngIf="editedComment?.id !== comment.id"
+              (click)="editComment(comment)"
+            >
+              Edit
+            </button>
+            <button
+              *ngIf="editedComment?.id === comment.id"
+              (click)="saveComment()"
+            >
+              Save
+            </button>
+            <button
+              *ngIf="editedComment?.id === comment.id"
+              (click)="cancelEdit()"
+            >
+              Cancel
+            </button>
             <button (click)="deleteComment(comment.id)">Delete</button>
           </td>
         </tr>
       </tbody>
     </table>
     <div>
-      <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">
+      <button
+        (click)="changePage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+      >
         Previous
       </button>
-      <button (click)="changePage(currentPage + 1)" [disabled]="currentPage * itemsPerPage >= totalItems">
+      <button
+        (click)="changePage(currentPage + 1)"
+        [disabled]="currentPage * itemsPerPage >= totalItems"
+      >
         Next
       </button>
     </div>
@@ -43,4 +115,4 @@
       </label>
     </div>
   </div>
-  
+</div>

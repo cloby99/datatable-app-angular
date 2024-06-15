@@ -5,10 +5,9 @@ import { Comment } from './comment.model';
 @Component({
   selector: 'app-data-table',
   templateUrl: './data-table.component.html',
-  styleUrls: ['./data-table.component.css']
+  styleUrls: ['./data-table.component.css'],
 })
 export class DataTableComponent implements OnInit {
-
   comments: Comment[] = [];
   filteredComments: Comment[] = [];
   currentPage = 1;
@@ -17,20 +16,21 @@ export class DataTableComponent implements OnInit {
   sortColumn = '';
   sortDirection = 'asc';
   totalItems = 0;
-  totalSumOfIDs = 0; // New property to hold the sum of IDs
+  totalSumOfIDs = 0;
+  editedComment: Comment | null = null;
 
-
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
     this.dataService.getComments().subscribe((data: Comment[]) => {
       this.comments = data;
       this.totalItems = data.length;
       this.applyFilter();
-      this.calculateTotalSumOfIDs(); // Calculate the sum of IDs after data is loaded
-
+      this.calculateTotalSumOfIDs();
     });
   }
+
+  // Handling Pagination
 
   changePage(page: number) {
     this.currentPage = page;
@@ -39,27 +39,36 @@ export class DataTableComponent implements OnInit {
 
   setItemsPerPage(value: number) {
     if (value === -1) {
-      this.itemsPerPage = this.totalItems; // Set itemsPerPage to totalItems if "All" is selected
+      this.itemsPerPage = this.totalItems;
     } else {
       this.itemsPerPage = value;
     }
     this.applyFilter();
   }
-  
+
   onItemsPerPageChange(event: Event) {
     const value = (event.target as HTMLSelectElement).value;
-    this.setItemsPerPage(+value); // Convert value to number
+    this.setItemsPerPage(+value);
   }
-  
-  
+
+  calculateTotalSumOfIDs() {
+    this.totalSumOfIDs = this.filteredComments.reduce(
+      (sum, comment) => sum + comment.id,
+      0
+    );
+  }
+
+  // Filters for Search and Sort Table Data
 
   applyFilter() {
     let filtered = this.comments;
     if (this.searchTerm) {
-      filtered = filtered.filter(comment => 
-        comment.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        comment.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        comment.body.toLowerCase().includes(this.searchTerm.toLowerCase()));
+      filtered = filtered.filter(
+        (comment) =>
+          comment.name.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          comment.email.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+          comment.body.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
     }
     if (this.sortColumn) {
       filtered = filtered.sort((a, b) => {
@@ -70,19 +79,22 @@ export class DataTableComponent implements OnInit {
         return 0;
       });
     }
-    
+
     this.totalItems = filtered.length;
     const start = (this.currentPage - 1) * this.itemsPerPage;
     const end = start + this.itemsPerPage;
     this.filteredComments = filtered.slice(start, end);
-    this.calculateTotalSumOfIDs(); // Recalculate the sum of IDs after filtering
-
+    this.calculateTotalSumOfIDs();
   }
+
+  // Search Function
 
   applySearch(event: Event) {
     this.searchTerm = (event.target as HTMLInputElement).value;
     this.applyFilter();
   }
+
+  // Sort Function
 
   sort(column: string) {
     if (this.sortColumn === column) {
@@ -94,17 +106,33 @@ export class DataTableComponent implements OnInit {
     this.applyFilter();
   }
 
+  // Function for Edit Table Data
+
   editComment(comment: Comment) {
-    // Implement edit logic here
+    this.editedComment = { ...comment };
   }
+
+  saveComment() {
+    if (this.editedComment) {
+      const index = this.comments.findIndex(
+        (comment) => comment.id === this.editedComment!.id
+      );
+      if (index !== -1) {
+        this.comments[index] = this.editedComment!;
+        this.applyFilter();
+        this.editedComment = null;
+      }
+    }
+  }
+
+  cancelEdit() {
+    this.editedComment = null;
+  }
+
+  // Function for Delete Table Data
 
   deleteComment(id: number) {
-    this.comments = this.comments.filter(comment => comment.id !== id);
+    this.comments = this.comments.filter((comment) => comment.id !== id);
     this.applyFilter();
   }
-
-  calculateTotalSumOfIDs() {
-    this.totalSumOfIDs = this.filteredComments.reduce((sum, comment) => sum + comment.id, 0);
-  }
-
 }
